@@ -1,0 +1,29 @@
+CREATE VIEW v_mayores AS
+SELECT UPPER(employee_name) AS nombre, 
+       TRUNC(MONTHS_BETWEEN(SYSDATE, hiredate)/12) AS edad
+FROM employees
+WHERE TRUNC(MONTHS_BETWEEN(SYSDATE, hiredate)/12) > 30
+ORDER BY edad, nombre DESC;
+
+GRANT SELECT ON v_mayores TO jcarreno;
+---- PUNTO 2
+CREATE VIEW v_salarios AS
+SELECT employee_id AS eid,
+       employee_name AS nombre,
+       salary + (salary * commission / 100) AS salario_aumentado
+FROM employees
+WHERE (salary + (salary * commission / 100)) BETWEEN 1000 AND 5000;
+
+GRANT SELECT ON v_salarios TO jcarreno;
+---PUNTO3
+CREATE VIEW v_tipos AS
+SELECT employee_name AS nombre,
+       CASE 
+           WHEN category = 'P' THEN 'Planta'
+           WHEN category = 'T' THEN 'temporal'
+           ELSE 'desconocido'
+       END AS tipo
+FROM employees
+WHERE EXTRACT(YEAR FROM hiredate) > 1982;
+
+GRANT SELECT ON v_tipos TO jcarreno;
